@@ -1,11 +1,13 @@
-import { useColorScheme } from '@/components/useColorScheme';
-import { AppProvider } from '@/provider/AppProvider';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
+
+import { useColorScheme } from '@/components/useColorScheme';
+import { AppProvider } from '@/provider/AppProvider';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -15,17 +17,26 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
+  const colorScheme = useColorScheme();
+
   useEffect(() => {
     if (error) throw error;
   }, [error]);
 
   useEffect(() => {
-    if (loaded) SplashScreen.hideAsync();
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
   }, [loaded]);
 
-  const colorScheme = useColorScheme();
-  
-  if (!loaded) return null;
+  if (!loaded) {
+    return (
+      <ActivityIndicator
+        size="large"
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+      />
+    );
+  }
 
   return (
     <AppProvider>
